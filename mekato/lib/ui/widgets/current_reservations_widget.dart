@@ -12,7 +12,7 @@ class CurrentReservationsWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsetsGeometry.symmetric(horizontal: xpadding),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -21,7 +21,7 @@ class CurrentReservationsWidget extends StatelessWidget {
               Icon(Icons.arrow_right_alt_rounded, color: Colors.black),
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           SizedBox(
             height: 165,
             child: ListView.builder(

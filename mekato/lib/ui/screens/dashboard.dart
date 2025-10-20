@@ -16,9 +16,9 @@ class Dashboard extends StatelessWidget {
       children: [
         SizedBox(height: ypadding),
         CurrentReservationsWidget(xpadding: xpadding),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
         OffersWidget(xpadding: xpadding),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
         MenuWidget(xpadding: xpadding),
         SizedBox(height: 30),
       ],
