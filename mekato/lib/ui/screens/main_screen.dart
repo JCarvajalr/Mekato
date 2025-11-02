@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/screens/dashboard.dart';
 import 'package:mekato/ui/widgets/mekato_navbar.dart';
+import 'package:mekato/ui/screens/account_screen.dart'; 
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -21,6 +22,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      Dashboard(),
+      // Si tienes pantalla de reservas, ponla aquí
+      Container(child: Center(child: Text('Reservas (placeholder)'))),
+      const AccountScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MekatoColors.main,
@@ -31,7 +39,10 @@ class _MainScreenState extends State<MainScreen> {
           IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
         ],
       ),
-      body: Dashboard(),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
       bottomNavigationBar: MekatoNavbar(
         currentIndex: _selectedIndex,
         onTap: _onNavbarTap,
