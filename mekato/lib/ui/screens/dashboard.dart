@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mekato/ui/widgets/current_reservations_widget.dart';
-import 'package:mekato/ui/widgets/menu_widget.dart';
-import 'package:mekato/ui/widgets/offers_widget.dart';
+import 'package:mekato/ui/widgets/dashboard/current_reservations_widget.dart';
+import 'package:mekato/ui/widgets/dashboard/menu_widget.dart';
+import 'package:mekato/ui/widgets/dashboard/offers_widget.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
