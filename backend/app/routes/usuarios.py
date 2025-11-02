@@ -5,12 +5,30 @@ from typing import Optional
 
 from app.database import get_db
 from app.models import Usuario
-from app.schemas import UsuarioCreate, UsuarioResponse, UsuarioLogin, UsuarioUpdate, APIResponse
+from app.schemas import UsuarioCreate, UsuarioResponse, UsuarioLogin, UsuarioUpdate, APIResponse, ErrorResponse
 from app import auth
 
-router = APIRouter(prefix="/api/usuarios", tags=["usuarios"])
+router = APIRouter(prefix="/api/usuarios", tags=["Usuarios 👤"])
 
-@router.post("/registro", response_model=APIResponse)
+@router.post(
+    "/registro",
+    response_model=APIResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Registrar nuevo usuario",
+    description="""
+    Crea una nueva cuenta de usuario en el sistema.
+    
+    ### Validaciones:
+    - Email debe ser único
+    - Contraseña mínimo 6 caracteres
+    - Todos los campos obligatorios deben ser proporcionados
+    """,
+    responses={
+        201: {"description": "Usuario creado exitosamente"},
+        400: {"model": ErrorResponse, "description": "Email ya registrado"},
+        422: {"model": ErrorResponse, "description": "Error de validación en los datos"}
+    }
+)
 def registrar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     # Verificar si el email ya existe
     db_usuario = db.query(Usuario).filter(Usuario.email == usuario.email).first()
@@ -40,7 +58,21 @@ def registrar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
         data={"usuario": UsuarioResponse.from_orm(db_usuario)}
     )
 
-@router.post("/login", response_model=APIResponse)
+@router.post(
+    "/login",
+    response_model=APIResponse,
+    summary="Iniciar sesión",
+    description="""
+    Autentica un usuario y genera un token JWT para acceder a endpoints protegidos.
+    
+    El token debe incluirse en el header de las solicitudes protegidas:
+    `Authorization: Bearer <token>`
+    """,
+    responses={
+        200: {"description": "Login exitoso, token generado"},
+        401: {"model": ErrorResponse, "description": "Credenciales incorrectas"}
+    }
+)
 def login_usuario(usuario: UsuarioLogin, db: Session = Depends(get_db)):
     # Verificar credenciales
     db_usuario = auth.authenticate_user(db, usuario.email, usuario.contraseña)
@@ -67,7 +99,16 @@ def login_usuario(usuario: UsuarioLogin, db: Session = Depends(get_db)):
         }
     )
 
-@router.get("/perfil", response_model=APIResponse)
+@router.get(
+    "/perfil",
+    response_model=APIResponse,
+    summary="Obtener perfil del usuario",
+    description="Obtiene la información del perfil del usuario autenticado.",
+    responses={
+        200: {"description": "Perfil obtenido exitosamente"},
+        401: {"model": ErrorResponse, "description": "Token inválido o expirado"}
+    }
+)
 def obtener_perfil_usuario(current_user: Usuario = Depends(auth.get_current_active_user)):
     return APIResponse(
         success=True,
@@ -75,7 +116,25 @@ def obtener_perfil_usuario(current_user: Usuario = Depends(auth.get_current_acti
         data={"usuario": UsuarioResponse.from_orm(current_user)}
     )
 
-@router.put("/perfil", response_model=APIResponse)
+@router.put(
+    "/perfil",
+    response_model=APIResponse,
+    summary="Actualizar perfil del usuario",
+    description="""
+    Actualiza la información del perfil del usuario.
+    
+    ### Características:
+    - Solo actualiza los campos enviados (parcial update)
+    - No requiere reautenticación después de la actualización
+    - No se puede cambiar la contraseña en este endpoint
+    """,
+    responses={
+        200: {"description": "Perfil actualizado exitosamente"},
+        400: {"model": ErrorResponse, "description": "Email ya registrado por otro usuario"},
+        401: {"model": ErrorResponse, "description": "Token inválido o expirado"},
+        422: {"model": ErrorResponse, "description": "Error de validación en los datos"}
+    }
+)
 def actualizar_perfil_usuario(
     usuario_update: UsuarioUpdate,
     db: Session = Depends(get_db),
