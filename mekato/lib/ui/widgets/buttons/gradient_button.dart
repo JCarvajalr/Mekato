@@ -5,7 +5,7 @@ import 'package:mekato/ui/core/mekato_colors.dart';
 class GradientButton extends StatelessWidget {
   final IconData iconB;
   final String labelB;
-  final Function onTap;
+  final VoidCallback onTap;
   Color leftColor;
   Color rightColor;
   GradientButton({
@@ -38,9 +38,7 @@ class GradientButton extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(vertical: 5),
       child: ElevatedButton.icon(
-        onPressed: () {
-          onTap;
-        },
+        onPressed: onTap,
         icon: Icon(iconB, size: 22),
         label: Text(
           labelB,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/ui/screens/reservations/create_reservation_screen.dart';
 import 'package:mekato/ui/widgets/buttons/gradient_button.dart';
 import 'package:mekato/ui/widgets/reservations/reservations_listview.dart';
 
-class Reservations extends StatelessWidget {
-  const Reservations({super.key});
+class ReservationsScreen extends StatelessWidget {
+  const ReservationsScreen({super.key});
   final double xpadding = 20;
   final double ypadding = 14;
 
@@ -20,7 +21,14 @@ class Reservations extends StatelessWidget {
                 child: GradientButton(
                   iconB: Icons.date_range,
                   labelB: 'Crear nueva reserva',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateReservationScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

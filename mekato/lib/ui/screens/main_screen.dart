@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/screens/dashboard.dart';
-import 'package:mekato/ui/screens/reservations.dart';
+import 'package:mekato/ui/screens/reservations/reservations_screen.dart';
 import 'package:mekato/ui/widgets/mekato_navbar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  List<Widget> pages = [Dashboard(), Reservations(), Dashboard()];
+  List<Widget> pages = [Dashboard(), ReservationsScreen(), Dashboard()];
 
   void _onNavbarTap(int value) {
     setState(() {
