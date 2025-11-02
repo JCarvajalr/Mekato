@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/ui/core/mekato_styles.dart';
+import 'package:mekato/ui/screens/reservations/edit_reversation_screen.dart';
 import 'package:mekato/ui/widgets/cards/reservation_card.dart';
 
 class ReservationsListview extends StatefulWidget {
@@ -27,9 +28,12 @@ class _ReservationsListviewState extends State<ReservationsListview> {
                 guests: 2,
                 location: "Cra 10 #25-80, Bogotá",
                 onEdit: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Modificar reserva')),
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditReservationScreen(),
+                      ),
+                    );
                 },
                 onCancel: () {
                   ScaffoldMessenger.of(context).showSnackBar(

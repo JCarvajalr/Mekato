@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/widgets/reservations/form_to_reservate.dart';
 
-class CreateReservationScreen extends StatefulWidget {
-  const CreateReservationScreen({super.key});
+class EditReservationScreen extends StatefulWidget {
+  const EditReservationScreen({super.key});
 
   @override
-  State<CreateReservationScreen> createState() =>
-      _CreateReservationScreenState();
+  State<EditReservationScreen> createState() => _EditReservationScreenState();
 }
 
-class _CreateReservationScreenState extends State<CreateReservationScreen> {
+class _EditReservationScreenState extends State<EditReservationScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Reserva creada exitosamente 🎉")),
+        const SnackBar(content: Text("Reserva modificada exitosamente 🎉")),
       );
     }
   }
@@ -27,10 +26,10 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Icon(Icons.add_box_rounded),
+            const Icon(Icons.edit_calendar_rounded),
             const SizedBox(width: 8),
             const Text(
-              "Crear Reserva",
+              "Modificar Reserva",
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ],
@@ -44,7 +43,10 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              child: FormToReservate(formKey: _formKey),
+              child: FormToReservate(
+                formKey: _formKey,
+                initialDate: "5/11/2025",
+              ),
             ),
           ),
           Divider(),
@@ -53,30 +55,30 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
             width: double.infinity,
             child: Row(
               children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ButtonStyle(
-                    padding: WidgetStatePropertyAll(
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
-                    ),
-                    foregroundColor: WidgetStatePropertyAll(Colors.redAccent),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.redAccent, width: 2),
-                        borderRadius: BorderRadiusGeometry.circular(12),
-                      ),
-                    ),
-                  ),
-                  child: Text("Cancelar"),
-                ),
-                SizedBox(width: 12),
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.pop(context);
+                //   },
+                //   style: ButtonStyle(
+                //     padding: WidgetStatePropertyAll(
+                //       const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+                //     ),
+                //     foregroundColor: WidgetStatePropertyAll(Colors.redAccent),
+                //     shape: WidgetStatePropertyAll(
+                //       RoundedRectangleBorder(
+                //         side: BorderSide(color: Colors.redAccent, width: 2),
+                //         borderRadius: BorderRadiusGeometry.circular(12),
+                //       ),
+                //     ),
+                //   ),
+                //   child: Text("Cancelar"),
+                // ),
+                // SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _submitForm,
                     label: const Text(
-                      "Confirmar Reserva",
+                      "Confirmar",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -87,7 +89,7 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.blueAccent,
                       foregroundColor: Colors.white,
                     ),
                   ),

@@ -85,6 +85,7 @@ class ReservationCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              textDirection: TextDirection.rtl,
               children: [
                 TextButton.icon(
                   style: ButtonStyle(
