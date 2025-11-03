@@ -40,11 +40,6 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MekatoColors.accent,
-      appBar: AppBar(
-        backgroundColor: MekatoColors.main,
-        title: const Text('Cuenta'),
-        foregroundColor: Colors.white,
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18),
         child: Column(

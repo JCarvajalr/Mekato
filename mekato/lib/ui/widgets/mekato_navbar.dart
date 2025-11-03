@@ -17,21 +17,26 @@ class MekatoNavbar extends StatelessWidget {
       currentIndex: currentIndex,
       backgroundColor: MekatoColors.main,
       onTap: onTap,
-      // selectedItemColor: const Color.fromARGB(237, 213, 176, 146),
-      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: const Color.fromARGB(255, 243, 226, 172),
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+      selectedIconTheme: IconThemeData(
+        size: 30,
+        shadows: [
+          Shadow(
+            color: const Color.fromARGB(255, 246, 247, 198).withOpacity(0.5),
+            blurRadius: 16,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Inicio',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
         BottomNavigationBarItem(
           icon: Icon(Icons.stars_rounded),
-          label: 'Reservas'
-          ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person), 
-          label: 'Cuenta'
-          ),
+          label: 'Reservas',
+        ),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta'),
       ],
     );
   }

@@ -7,7 +7,6 @@ import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class EditProfileScreen extends StatefulWidget {
   final AccountModel account;
   const EditProfileScreen({super.key, required this.account});
@@ -29,17 +28,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     _pickedImagePath = widget.account.imagePath;
-    
+
     final parts = widget.account.name.trim().split(' ');
     final firstName = parts.isNotEmpty ? parts.first : '';
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
-    
+
     _firstNameController = TextEditingController(text: firstName);
     _lastNameController = TextEditingController(text: lastName);
     _phoneController = TextEditingController(text: widget.account.phone);
     _emailController = TextEditingController(text: widget.account.email);
-}
-
+  }
 
   @override
   void dispose() {
@@ -48,11 +46,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _phoneController.dispose();
     _emailController.dispose();
     super.dispose();
-}
-
+  }
 
   Future<void> _pickFromGallery() async {
-    final XFile? file = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    final XFile? file = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
     if (file != null) {
       setState(() {
         _pickedImagePath = file.path;
@@ -61,60 +61,59 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _onSave() async {
-  setState(() => _saving = true);
+    setState(() => _saving = true);
 
-  final fullName = '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}'.trim();
+    final fullName =
+        '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}'
+            .trim();
 
-  // Crear el JSON que vamos a mandar (sin imagen)
-  final Map<String, dynamic> data = {
-    "first_name": _firstNameController.text.trim(),
-    "last_name": _lastNameController.text.trim(),
-    "full_name": fullName,
-    "phone": _phoneController.text.trim(),
-    "email": _emailController.text.trim(),
-  };
+    // Crear el JSON que vamos a mandar (sin imagen)
+    final Map<String, dynamic> data = {
+      "first_name": _firstNameController.text.trim(),
+      "last_name": _lastNameController.text.trim(),
+      "full_name": fullName,
+      "phone": _phoneController.text.trim(),
+      "email": _emailController.text.trim(),
+    };
 
-  try {
-    // URL del backend (ajústala según el endpoint real)
-    final url = Uri.parse("http://localhost:8000/users/update"); 
-    
+    try {
+      // URL del backend (ajústala según el endpoint real)
+      final url = Uri.parse("http://localhost:8000/users/update");
 
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
-      // Éxito: actualiza el modelo local
-      final updated = widget.account.copyWith(
-        name: fullName,
-        phone: _phoneController.text.trim(),
-        email: _emailController.text.trim(),
-        imagePath: _pickedImagePath,
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
       );
 
+      if (response.statusCode == 200) {
+        // Éxito: actualiza el modelo local
+        final updated = widget.account.copyWith(
+          name: fullName,
+          phone: _phoneController.text.trim(),
+          email: _emailController.text.trim(),
+          imagePath: _pickedImagePath,
+        );
+
+        setState(() => _saving = false);
+        Navigator.pop(context, updated);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Perfil actualizado correctamente.')),
+        );
+      } else {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al actualizar: ${response.body}')),
+        );
+      }
+    } catch (e) {
       setState(() => _saving = false);
-      Navigator.pop(context, updated);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Perfil actualizado correctamente.')),
-      );
-    } else {
-      setState(() => _saving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al actualizar: ${response.body}')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error de conexión: $e')));
     }
-  } catch (e) {
-    setState(() => _saving = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error de conexión: $e')),
-    );
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +168,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: const Text('Cancelar'),
                       ),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: MekatoColors.main),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MekatoColors.main,
+                        ),
                         onPressed: _onSave,
                         child: const Text('Guardar'),
                       ),
