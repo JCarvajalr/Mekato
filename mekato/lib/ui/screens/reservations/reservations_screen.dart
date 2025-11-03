@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/data/services/reservations_service.dart';
 import 'package:mekato/ui/screens/reservations/create_reservation_screen.dart';
 import 'package:mekato/ui/widgets/buttons/gradient_button.dart';
 import 'package:mekato/ui/widgets/reservations/reservations_listview.dart';
 
 class ReservationsScreen extends StatelessWidget {
-  const ReservationsScreen({super.key});
+  final ReservationsService service;
   final double xpadding = 20;
   final double ypadding = 14;
+  
+  const ReservationsScreen({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,8 @@ class ReservationsScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateReservationScreen(),
+                        builder: (context) =>
+                            CreateReservationScreen(service: service),
                       ),
                     );
                   },
@@ -34,7 +38,7 @@ class ReservationsScreen extends StatelessWidget {
             ],
           ),
           SizedBox(height: 26),
-          Expanded(child: ReservationsListview()),
+          Expanded(child: ReservationsListview(service: service)),
         ],
       ),
     );
