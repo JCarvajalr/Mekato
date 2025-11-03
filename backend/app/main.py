@@ -100,10 +100,11 @@ app.add_middleware(
 )
 
 # Importar rutas
-from app.routes import usuarios, reservas
+from app.routes import usuarios, reservas, chatbot
 
 app.include_router(usuarios.router)
 app.include_router(reservas.router)
+app.include_router(chatbot.router)
 
 @app.get(
     "/",
