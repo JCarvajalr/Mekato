@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/data/models/reservation.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class ReservationCard extends StatelessWidget {
-  final String date; // Título
-  final String time;
-  final int guests;
-  final String location;
   final VoidCallback onEdit;
   final VoidCallback onCancel;
+  final Reservation reservation;
 
-  const ReservationCard({
+  ReservationCard({
     super.key,
-    required this.date,
-    required this.time,
-    required this.guests,
-    required this.location,
+    required this.reservation,
     required this.onEdit,
     required this.onCancel,
-  });
+  }) {
+    _initFormat();
+  }
+
+  void _initFormat() async {
+    await initializeDateFormatting('es_ES', null);
+  }
+
+  String _formatDate(String date) {
+    DateTime fecha = DateTime.parse(date);
+
+    String fechaFormateada = DateFormat(
+      'EEEE, d MMMM y',
+      'es_ES',
+    ).format(fecha);
+    return fechaFormateada;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +48,7 @@ class ReservationCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    date,
+                    _formatDate(reservation.date),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -50,7 +63,7 @@ class ReservationCard extends StatelessWidget {
                     const Icon(Icons.people, color: Colors.grey, size: 18),
                     const SizedBox(width: 6),
                     Text(
-                      '$guests',
+                      '${reservation.guests}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   ],
@@ -64,7 +77,10 @@ class ReservationCard extends StatelessWidget {
               children: [
                 const Icon(Icons.access_time, color: Colors.grey, size: 18),
                 const SizedBox(width: 6),
-                Text(time, style: const TextStyle(color: Colors.black54)),
+                Text(
+                  reservation.timeOfDay.format(context),
+                  style: const TextStyle(color: Colors.black54),
+                ),
               ],
             ),
             const SizedBox(height: 4),
@@ -75,7 +91,7 @@ class ReservationCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    location,
+                    "Restaurante Mekato",
                     style: const TextStyle(color: Colors.black54),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -85,23 +101,7 @@ class ReservationCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              textDirection: TextDirection.rtl,
               children: [
-                TextButton.icon(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
-                    foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  ),
-                  onPressed: onEdit,
-                  icon: const Icon(Icons.edit),
-                  label: const Text("Modificar"),
-                ),
-                const SizedBox(width: 8),
                 TextButton.icon(
                   style: ButtonStyle(
                     shape: WidgetStatePropertyAll(
@@ -115,6 +115,21 @@ class ReservationCard extends StatelessWidget {
                   onPressed: onCancel,
                   icon: const Icon(Icons.cancel),
                   label: const Text("Cancelar"),
+                ),
+                const SizedBox(width: 8),
+                TextButton.icon(
+                  style: ButtonStyle(
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                    ),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
+                    foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  ),
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit),
+                  label: const Text("Modificar"),
                 ),
               ],
             ),

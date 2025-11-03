@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/data/models/reservation.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/widgets/reservations/form_to_reservate.dart';
 
@@ -12,6 +13,19 @@ class CreateReservationScreen extends StatefulWidget {
 
 class _CreateReservationScreenState extends State<CreateReservationScreen> {
   final _formKey = GlobalKey<FormState>();
+  late Reservation newReservation;
+
+  @override
+  void initState() {
+    newReservation = Reservation(
+      id: 1,
+      userId: 1,
+      date: "",
+      time: "",
+      guests: 0,
+    );
+    super.initState();
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -44,7 +58,10 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              child: FormToReservate(formKey: _formKey),
+              child: FormToReservate(
+                formKey: _formKey,
+                newReservation: newReservation,
+              ),
             ),
           ),
           Divider(),
