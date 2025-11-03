@@ -18,8 +18,8 @@ class Reservation {
     required this.guests,
     this.comments = "",
   }) {
-    dateTime = DateTime.parse(date);
-    _stringToTimeOfDay(time);
+    if (date.isNotEmpty) dateTime = DateTime.parse(date);
+    if (time.isNotEmpty) _stringToTimeOfDay(time);
   }
 
   factory Reservation.fromJson(Map<String, dynamic> json) {

@@ -65,8 +65,9 @@ class _FormToReservateState extends State<FormToReservate> {
         selectedDate = picked;
         _dateController.text = "${picked.day}/${picked.month}/${picked.year}";
       });
-      widget.newReservation.date =
-          "${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}";
+      final month = selectedDate!.month.toString().padLeft(2, '0');
+      final day = selectedDate!.day.toString().padLeft(2, '0');
+      widget.newReservation.date = "${selectedDate!.year}-$month-$day";
     }
   }
 
@@ -132,7 +133,13 @@ class _FormToReservateState extends State<FormToReservate> {
                     _dateController.text = widget.reservation!
                         .getFormatedDate();
                     selectedDate = widget.reservation!.dateTime;
-                    widget.newReservation.date = widget.reservation!.date;
+                    final month = selectedDate!.month.toString().padLeft(
+                      2,
+                      '0',
+                    );
+                    final day = selectedDate!.day.toString().padLeft(2, '0');
+                    widget.newReservation.date =
+                        "${selectedDate!.year}-$month-$day";
                     _safeSetState();
                   },
                   icon: Icon(Icons.refresh_outlined),
@@ -169,7 +176,9 @@ class _FormToReservateState extends State<FormToReservate> {
                       context,
                     );
                     selectedTime = widget.reservation!.timeOfDay;
-                    widget.newReservation.time = _timeOfDayToString(selectedTime!);
+                    widget.newReservation.time = _timeOfDayToString(
+                      selectedTime!,
+                    );
                     _safeSetState();
                   },
                   icon: Icon(Icons.refresh_outlined),

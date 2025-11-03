@@ -8,7 +8,6 @@ class ReservationsController {
 
   // GET Request
   Future<Map<String, dynamic>> getReservations(String token) async {
-    debugPrint("Controller");
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/reservas/'),
@@ -35,7 +34,7 @@ class ReservationsController {
   ) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/reservas'),
+        Uri.parse('$baseUrl/reservas/'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -85,6 +84,7 @@ class ReservationsController {
     }
   }
 
+  // DELETE - Eliminar reserva
   Future<bool> cancelReservation(int id, String token) async {
     try {
       final response = await http.delete(

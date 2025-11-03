@@ -35,11 +35,9 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      print("submitForm ->");
-      print(newReservation.time);
       widget.service.updateReservation(
         newReservation,
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMTk2NDIxfQ.umZ4qgtzNPjH89cz9Apbfg0tWQHcEb2Pt9VZfu0-jkk",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0",
       );
       Navigator.pop(context);
     }

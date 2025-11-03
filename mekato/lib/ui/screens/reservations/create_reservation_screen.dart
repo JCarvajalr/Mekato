@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/data/models/reservation.dart';
+import 'package:mekato/data/services/reservations_service.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/widgets/reservations/form_to_reservate.dart';
 
 class CreateReservationScreen extends StatefulWidget {
-  const CreateReservationScreen({super.key});
+  final ReservationsService service;
+  const CreateReservationScreen({super.key, required this.service});
 
   @override
   State<CreateReservationScreen> createState() =>
@@ -29,9 +31,8 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Reserva creada exitosamente 🎉")),
-      );
+      widget.service.createReservation(newReservation, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0");
+      Navigator.pop(context);
     }
   }
 

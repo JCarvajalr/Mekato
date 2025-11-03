@@ -5,7 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 class ReservationCard extends StatelessWidget {
   final VoidCallback onEdit;
-  final VoidCallback onCancel;
+  final Function(int id) onCancel;
   final Reservation reservation;
 
   ReservationCard({
@@ -112,7 +112,9 @@ class ReservationCard extends StatelessWidget {
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
                     foregroundColor: WidgetStatePropertyAll(Colors.redAccent),
                   ),
-                  onPressed: onCancel,
+                  onPressed: () {
+                    _confirmCancel(context);
+                  },
                   icon: const Icon(Icons.cancel),
                   label: const Text("Cancelar"),
                 ),
@@ -135,6 +137,50 @@ class ReservationCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmCancel(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // permite cerrar tocando fuera del dialog
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: const EdgeInsets.all(24),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Eliminar reserva para el ${_formatDate(reservation.date)}?",
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actionsPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(foregroundColor: Colors.grey.shade600),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onCancel(reservation.id);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text("Eliminar"),
+          ),
+        ],
       ),
     );
   }

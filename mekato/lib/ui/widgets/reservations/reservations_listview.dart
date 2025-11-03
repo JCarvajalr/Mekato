@@ -6,23 +6,23 @@ import 'package:mekato/ui/screens/reservations/edit_reversation_screen.dart';
 import 'package:mekato/ui/widgets/cards/reservation_card.dart';
 
 class ReservationsListview extends StatefulWidget {
-  const ReservationsListview({super.key});
+  final ReservationsService service;
+  final String token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0";
+  const ReservationsListview({super.key, required this.service});
 
   @override
   State<ReservationsListview> createState() => _ReservationsListviewState();
 }
 
 class _ReservationsListviewState extends State<ReservationsListview> {
-  ReservationsService service = ReservationsService();
   bool _isLoading = false;
   List<Reservation> _currentList = [];
 
   void _getReservations() async {
     _isLoading = true;
     _safeSetState();
-    _currentList = await service.getReservations(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMTk2NDIxfQ.umZ4qgtzNPjH89cz9Apbfg0tWQHcEb2Pt9VZfu0-jkk",
-    );
+    _currentList = await widget.service.getReservations(widget.token);
     _isLoading = false;
     _safeSetState();
   }
@@ -30,7 +30,19 @@ class _ReservationsListviewState extends State<ReservationsListview> {
   @override
   void initState() {
     _getReservations();
+    widget.service.addListener(update);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.service.addListener(() {});
+    super.dispose();
+  }
+
+  void update() {
+    _getReservations();
+    _safeSetState();
   }
 
   @override
@@ -60,23 +72,24 @@ class _ReservationsListviewState extends State<ReservationsListview> {
                           MaterialPageRoute(
                             builder: (context) => EditReservationScreen(
                               reservation: _currentList[index],
-                              service: service,
+                              service: widget.service,
                             ),
                           ),
                         );
                       },
-                      onCancel: () {
-                        // service.cancelReservation(_currentList[index].id);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Reserva cancelada')),
-                        );
-                      },
+                      onCancel: _cancelReservation,
                     );
                   },
                 ),
         ),
       ],
     );
+  }
+
+  void _cancelReservation(int id) async {
+    await widget.service.cancelReservation(id, widget.token);
+    await Future.delayed(Duration(seconds: 1));
+    update();
   }
 
   void _safeSetState() {
