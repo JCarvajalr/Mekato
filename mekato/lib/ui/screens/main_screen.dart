@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/screens/dashboard.dart';
 import 'package:mekato/ui/screens/reservations/reservations_screen.dart';
+import 'package:mekato/ui/screens/chat/chat_screen.dart';
 import 'package:mekato/ui/widgets/mekato_navbar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -39,6 +40,22 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: MekatoNavbar(
         currentIndex: _selectedIndex,
         onTap: _onNavbarTap,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: FloatingActionButton(
+          heroTag: 'chat_fab',
+          onPressed: () {
+            // Ajusta backendBaseUrl según tu entorno de desarrollo (emulador Android usa 10.0.2.2)
+            final backendBaseUrl = 'http://10.0.2.2:8000';
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => ChatScreen(backendBaseUrl: backendBaseUrl),
+            ));
+          },
+          backgroundColor: MekatoColors.main,
+          child: const Icon(Icons.chat_bubble_outline),
+        ),
       ),
     );
   }
