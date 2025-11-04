@@ -4,6 +4,7 @@ import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/screens/dashboard.dart';
 import 'package:mekato/ui/screens/reservations/reservations_screen.dart';
 import 'package:mekato/ui/widgets/mekato_navbar.dart';
+import 'package:mekato/ui/screens/account_screen.dart'; 
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> get pages => [
     Dashboard(),
     ReservationsScreen(service: reservationsService),
-    Dashboard(),
+    AccountScreen(),
   ];
 
   void _onNavbarTap(int value) {
@@ -29,6 +30,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         elevation: 8,
@@ -40,8 +42,8 @@ class _MainScreenState extends State<MainScreen> {
           height: 40,
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
         ],
       ),
       body: pages[_selectedIndex],

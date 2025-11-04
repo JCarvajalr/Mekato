@@ -11,7 +11,7 @@ class User {
     required this.apellidos,
     required this.telefono,
     required this.email,
-    required this.password,
+    this.password = "",
   });
 
   Map<String, dynamic> toJson() {
@@ -22,5 +22,19 @@ class User {
       'telefono': telefono,
       'contraseña': password,
     };
+  }
+
+  User copyWith({
+    String? name,
+    String? lastName,
+    String? phone,
+    String? email,
+  }) {
+    return User(
+      nombres: name ?? nombres,
+      apellidos: lastName ?? apellidos,
+      email: email ?? this.email,
+      telefono: phone ?? telefono,
+    );
   }
 }
