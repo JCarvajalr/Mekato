@@ -21,7 +21,7 @@ bot = ChatBot(
             # Respuesta por defecto cuando no se encuentra una coincidencia suficiente
             "default_response": "Lo siento, no entendí eso. Puedes pedirme 'mis reservas' para ver tus reservas.",
             # Umbral de similitud para aceptar una respuesta; si la similitud es menor, se usará default_response
-            "maximum_similarity_threshold": 0.85,
+            "maximum_similarity_threshold": 0.05,
         }
     ],
 )
@@ -45,12 +45,12 @@ def _train_minimal():
         pass
 
 # Solo entrenar si no existe la base de datos del bot
-try:
-    if not os.path.exists(db_path):
-        _train_minimal()
-except Exception:
-    # protección general para entornos donde chatterbot pueda fallar en import/creación
-    pass
+# try:
+#     if not os.path.exists(db_path):
+_train_minimal()
+# except Exception:
+#     # protección general para entornos donde chatterbot pueda fallar en import/creación
+#     pass
 
 
 def get_bot():
