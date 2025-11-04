@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 class ReservationsController {
   static const String baseUrl = 'http://186.183.171.16:25565/api';
-  // 10.0.2.2:3000
 
   // GET Request
   Future<Map<String, dynamic>> getReservations(String token) async {

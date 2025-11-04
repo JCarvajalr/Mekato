@@ -25,7 +25,7 @@ class _MenuWidgetState extends State<MenuWidget> {
               Icon(Icons.arrow_right_alt_rounded, color: Colors.black),
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 8),
           SizedBox(
             height: 145,
             child: ListView.builder(

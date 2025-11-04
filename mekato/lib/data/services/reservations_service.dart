@@ -27,6 +27,7 @@ class ReservationsService {
   Future<bool> createReservation(Reservation reservation, String token) async {
     final body = reservation.toJson();
     final response = await controller.createReservation(body, token);
+    notify();
     return response;
   }
 

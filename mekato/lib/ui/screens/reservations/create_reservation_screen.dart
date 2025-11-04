@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/data/models/reservation.dart';
+import 'package:mekato/data/services/auth_service.dart';
 import 'package:mekato/data/services/reservations_service.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/widgets/reservations/form_to_reservate.dart';
@@ -14,6 +15,7 @@ class CreateReservationScreen extends StatefulWidget {
 }
 
 class _CreateReservationScreenState extends State<CreateReservationScreen> {
+  final String _authToken = AuthService().authToken;
   final _formKey = GlobalKey<FormState>();
   late Reservation newReservation;
 
@@ -31,7 +33,7 @@ class _CreateReservationScreenState extends State<CreateReservationScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      widget.service.createReservation(newReservation, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0");
+      widget.service.createReservation(newReservation, _authToken);
       Navigator.pop(context);
     }
   }
