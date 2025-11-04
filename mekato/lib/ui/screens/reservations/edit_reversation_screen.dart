@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/data/models/reservation.dart';
+import 'package:mekato/data/services/reservations_service.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 import 'package:mekato/ui/widgets/reservations/form_to_reservate.dart';
 
 class EditReservationScreen extends StatefulWidget {
-  const EditReservationScreen({super.key});
+  final Reservation reservation;
+  final ReservationsService service;
+  const EditReservationScreen({
+    super.key,
+    required this.reservation,
+    required this.service,
+  });
 
   @override
   State<EditReservationScreen> createState() => _EditReservationScreenState();
@@ -11,12 +19,27 @@ class EditReservationScreen extends StatefulWidget {
 
 class _EditReservationScreenState extends State<EditReservationScreen> {
   final _formKey = GlobalKey<FormState>();
+  late Reservation newReservation;
+  @override
+  void initState() {
+    newReservation = Reservation(
+      id: widget.reservation.id,
+      userId: widget.reservation.userId,
+      date: widget.reservation.date,
+      time: widget.reservation.time,
+      guests: widget.reservation.guests,
+      comments: widget.reservation.comments,
+    );
+    super.initState();
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Reserva modificada exitosamente 🎉")),
+      widget.service.updateReservation(
+        newReservation,
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0",
       );
+      Navigator.pop(context);
     }
   }
 
@@ -45,7 +68,8 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
               padding: const EdgeInsets.all(20),
               child: FormToReservate(
                 formKey: _formKey,
-                initialDate: "5/11/2025",
+                reservation: widget.reservation,
+                newReservation: newReservation,
               ),
             ),
           ),
@@ -55,25 +79,6 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
             width: double.infinity,
             child: Row(
               children: [
-                // TextButton(
-                //   onPressed: () {
-                //     Navigator.pop(context);
-                //   },
-                //   style: ButtonStyle(
-                //     padding: WidgetStatePropertyAll(
-                //       const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
-                //     ),
-                //     foregroundColor: WidgetStatePropertyAll(Colors.redAccent),
-                //     shape: WidgetStatePropertyAll(
-                //       RoundedRectangleBorder(
-                //         side: BorderSide(color: Colors.redAccent, width: 2),
-                //         borderRadius: BorderRadiusGeometry.circular(12),
-                //       ),
-                //     ),
-                //   ),
-                //   child: Text("Cancelar"),
-                // ),
-                // SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _submitForm,
