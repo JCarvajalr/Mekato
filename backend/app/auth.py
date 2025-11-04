@@ -22,6 +22,8 @@ if not SECRET_KEY:
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
+# Permite no fallar si no hay header Authorization (auto_error=False)
+security_optional = HTTPBearer(auto_error=False)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -71,3 +73,25 @@ async def get_current_user(
 
 async def get_current_active_user(current_user: Usuario = Depends(get_current_user)):
     return current_user
+
+
+async def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials = Depends(security_optional),
+    db: Session = Depends(get_db),
+):
+    """Intenta obtener el usuario desde el Authorization header.
+    Si no hay header o el token no es válido, devuelve None en lugar de lanzar 401.
+    """
+    if not credentials:
+        return None
+
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            return None
+    except JWTError:
+        return None
+
+    user = db.query(Usuario).filter(Usuario.email == email, Usuario.activo == True).first()
+    return user
