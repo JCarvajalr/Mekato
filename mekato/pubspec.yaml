@@ -22,8 +22,10 @@ dev_dependencies:
 
 flutter_launcher_icons:
   android: true
-  image_path: "assets/images/iconApp.png"
   min_sdk_android: 21
+  image_path: "assets/images/iconApp.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/iconApp.png"
 
 flutter:
   uses-material-design: true
