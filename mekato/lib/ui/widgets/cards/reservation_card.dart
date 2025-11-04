@@ -1,35 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/data/models/reservation.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:mekato/data/utils/date_formater.dart';
 
 class ReservationCard extends StatelessWidget {
   final VoidCallback onEdit;
   final Function(int id) onCancel;
   final Reservation reservation;
+  final DateFormater _formater = DateFormater();
 
   ReservationCard({
     super.key,
     required this.reservation,
     required this.onEdit,
     required this.onCancel,
-  }) {
-    _initFormat();
-  }
-
-  void _initFormat() async {
-    await initializeDateFormatting('es_ES', null);
-  }
-
-  String _formatDate(String date) {
-    DateTime fecha = DateTime.parse(date);
-
-    String fechaFormateada = DateFormat(
-      'EEEE, d MMMM y',
-      'es_ES',
-    ).format(fecha);
-    return fechaFormateada;
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +32,7 @@ class ReservationCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    _formatDate(reservation.date),
+                    _formater.formatDate(reservation.date),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -152,7 +136,7 @@ class ReservationCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Eliminar reserva para el ${_formatDate(reservation.date)}?",
+              "Eliminar reserva para el ${_formater.formatDate(reservation.date)}?",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
