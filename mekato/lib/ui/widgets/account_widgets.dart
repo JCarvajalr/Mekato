@@ -9,7 +9,7 @@ class AccountAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = MekatoColors.accent; // usa tu color definido
+    final bg = MekatoColors.accent;
     return Container(
       width: size,
       height: size,

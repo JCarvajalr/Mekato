@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mekato/data/models/account_model.dart';
 import 'package:mekato/data/controllers/account_controller.dart';
+import 'package:mekato/data/models/user.dart';
+import 'package:mekato/data/services/auth_service.dart';
 import 'package:mekato/ui/widgets/account_widgets.dart';
 import 'package:mekato/ui/core/mekato_colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final AccountModel account;
+  final User account;
   const EditProfileScreen({super.key, required this.account});
 
   @override
@@ -26,15 +27,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _pickedImagePath = widget.account.imagePath;
+    _pickedImagePath = "";
 
-    final parts = widget.account.name.trim().split(' ');
-    final firstName = parts.isNotEmpty ? parts.first : '';
-    final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+    final firstName = widget.account.nombres;
+    final lastName = widget.account.apellidos;
 
     _firstNameController = TextEditingController(text: firstName);
     _lastNameController = TextEditingController(text: lastName);
-    _phoneController = TextEditingController(text: widget.account.phone);
+    _phoneController = TextEditingController(text: widget.account.telefono);
     _emailController = TextEditingController(text: widget.account.email);
   }
 
@@ -60,37 +60,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _onSave() async {
-  setState(() => _saving = true);
+    setState(() => _saving = true);
 
-  final fullName =
-      '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}'
-          .trim();
-
-  final updatedAccount = widget.account.copyWith(
-    name: fullName,
-    phone: _phoneController.text.trim(),
-    email: _emailController.text.trim(),
-    imagePath: _pickedImagePath,
-  );
-
-  const token = 'TOKEN_DE_EJEMPLO'; // ⚠️ luego reemplázalo por el real del login
-
-  final success = await _accountController.updateAccount(updatedAccount, token);
-
-  setState(() => _saving = false);
-
-  if (success) {
-    Navigator.pop(context, updatedAccount);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Perfil actualizado correctamente.')),
+    final updatedAccount = widget.account.copyWith(
+      name: _firstNameController.text,
+      lastName: _lastNameController.text,
+      phone: _phoneController.text.trim(),
+      email: _emailController.text.trim(),
     );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Error al actualizar el perfil.')),
+
+    final token = AuthService().authToken;
+
+    final success = await _accountController.updateAccount(
+      updatedAccount,
+      token,
     );
+
+    setState(() => _saving = false);
+
+    if (success) {
+      Navigator.pop(context, updatedAccount);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Perfil actualizado correctamente.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al actualizar el perfil.')),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +148,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: MekatoColors.main),
+                          backgroundColor: MekatoColors.main,
+                        ),
                         onPressed: _onSave,
                         child: const Text('Guardar'),
                       ),

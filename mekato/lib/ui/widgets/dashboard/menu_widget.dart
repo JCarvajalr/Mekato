@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mekato/data/utils/menu.dart';
 import 'package:mekato/ui/core/mekato_styles.dart';
 import 'package:mekato/ui/widgets/cards/item_card_m.dart';
 
@@ -25,19 +26,19 @@ class _MenuWidgetState extends State<MenuWidget> {
               Icon(Icons.arrow_right_alt_rounded, color: Colors.black),
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 8),
           SizedBox(
             height: 145,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 9,
+              itemCount: menu.length,
               itemBuilder: (context, index) {
-                // final item = items[index];
                 return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ItemCardM(
-                      imagePath: "assets/images/hamb.jpg",
-                      title: "Hamburguesa especial",
+                      imagePath: "assets/images/${menu[index].imagePath}",
+                      title: menu[index].name,
                     ),
                     SizedBox(
                       width: 14,

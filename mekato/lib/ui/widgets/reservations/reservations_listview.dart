@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mekato/data/models/reservation.dart';
+import 'package:mekato/data/services/auth_service.dart';
 import 'package:mekato/data/services/reservations_service.dart';
 import 'package:mekato/ui/core/mekato_styles.dart';
 import 'package:mekato/ui/screens/reservations/edit_reversation_screen.dart';
@@ -7,8 +8,6 @@ import 'package:mekato/ui/widgets/cards/reservation_card.dart';
 
 class ReservationsListview extends StatefulWidget {
   final ReservationsService service;
-  final String token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuY2FybG9zQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyMjAyMTA3fQ.QEdxy4NThYIxSALajVH4Ask2LDxSxaiH4BwcCgpR_n0";
   const ReservationsListview({super.key, required this.service});
 
   @override
@@ -16,13 +15,14 @@ class ReservationsListview extends StatefulWidget {
 }
 
 class _ReservationsListviewState extends State<ReservationsListview> {
+  final String _authToken = AuthService().authToken;
   bool _isLoading = false;
   List<Reservation> _currentList = [];
 
   void _getReservations() async {
     _isLoading = true;
     _safeSetState();
-    _currentList = await widget.service.getReservations(widget.token);
+    _currentList = await widget.service.getReservations(_authToken);
     _isLoading = false;
     _safeSetState();
   }
@@ -61,6 +61,8 @@ class _ReservationsListviewState extends State<ReservationsListview> {
                     child: CircularProgressIndicator(),
                   ),
                 )
+              : (_currentList.isEmpty)
+              ? Text("No tienes reservas activas")
               : ListView.builder(
                   itemCount: _currentList.length,
                   itemBuilder: (context, index) {
@@ -87,7 +89,7 @@ class _ReservationsListviewState extends State<ReservationsListview> {
   }
 
   void _cancelReservation(int id) async {
-    await widget.service.cancelReservation(id, widget.token);
+    await widget.service.cancelReservation(id, _authToken);
     await Future.delayed(Duration(seconds: 1));
     update();
   }

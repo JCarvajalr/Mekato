@@ -15,7 +15,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  final ReservationsService reservationsService = ReservationsService();
+  ReservationsService reservationsService = ReservationsService();
+  List<Widget> get pages => [
+    Dashboard(),
+    ReservationsScreen(service: reservationsService),
+    AccountScreen(),
+  ];
 
   void _onNavbarTap(int value) {
     setState(() {
@@ -25,11 +30,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      Dashboard(),
-      ReservationsScreen(service: reservationsService),
-      const AccountScreen(),
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +37,10 @@ class _MainScreenState extends State<MainScreen> {
         shadowColor: Colors.black.withOpacity(0.6),
         backgroundColor: MekatoColors.main,
         foregroundColor: Colors.white,
-        title: const Text("Mekato"),
+        title: Image.asset(
+          "assets/images/LogoWhite.png",
+          height: 40,
+        ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),

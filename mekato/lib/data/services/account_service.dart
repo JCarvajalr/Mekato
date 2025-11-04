@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AccountService {
-  static const String baseUrl = 'http://10.0.2.2:8000'; // localhost para emulador Android
+  static const String baseUrl = 'http://186.183.171.16:25565/api/usuarios';
 
   /// Obtiene el perfil actual del usuario.
   Future<Map<String, dynamic>?> getProfile(String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/users/me'),
+        Uri.parse('$baseUrl/perfil'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -16,7 +16,7 @@ class AccountService {
       );
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        return json.decode(response.body)["data"];
       } else {
         print('❌ Error al obtener perfil: ${response.statusCode}');
         print(response.body);
@@ -32,7 +32,7 @@ class AccountService {
   Future<bool> updateProfile(Map<String, dynamic> data, String token) async {
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/users/update'),
+        Uri.parse('$baseUrl/perfil'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
