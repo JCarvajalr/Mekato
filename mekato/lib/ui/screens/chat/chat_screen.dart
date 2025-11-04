@@ -78,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
           _messages.add(ChatMessage(text: apiMessage.toString(), isUser: false));
         }
       } else if (resp.statusCode == 401) {
-        _messages.add(const ChatMessage(text: 'No autorizado. Proporcione un token válido en la configuración del chat.', isUser: false));
+        _messages.add(ChatMessage(text: 'No autorizado. Proporcione un token válido en la configuración del chat.', isUser: false));
       } else {
         _messages.add(ChatMessage(text: 'Error del servidor: ${resp.statusCode}', isUser: false));
       }
@@ -193,12 +193,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(width: 8),
                   CircleAvatar(
                     radius: 26,
+                    backgroundColor: Theme.of(context).primaryColor,
                     child: IconButton(
                       icon: const Icon(Icons.send),
                       color: Colors.white,
                       onPressed: () => _sendMessage(_controller.text),
                     ),
-                    backgroundColor: Theme.of(context).primaryColor,
                   )
                 ],
               ),

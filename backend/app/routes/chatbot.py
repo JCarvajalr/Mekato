@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from app.database import get_db
 from app import auth
@@ -24,7 +24,7 @@ def _serialize_schema(obj: Any) -> Dict:
 def chat(
     payload: dict,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(auth.get_current_active_user),
+    current_user: Optional[Usuario] = Depends(auth.get_current_user_optional),
 ):
     """Endpoint para interactuar con el chatbot.
 
@@ -40,6 +40,10 @@ def chat(
 
     # Palabras clave para listar reservas
     if any(k in texto for k in ["reserva", "reservas", "mis reservas", "mostrar reservas", "ver reservas"]):
+        # Para listar reservas se requiere autenticación
+        if current_user is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token requerido para ver reservas")
+
         # Obtener reservas del usuario
         reservas = (
             db.query(Reserva)

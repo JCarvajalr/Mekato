@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
           heroTag: 'chat_fab',
           onPressed: () {
             // Ajusta backendBaseUrl según tu entorno de desarrollo (emulador Android usa 10.0.2.2)
-            final backendBaseUrl = 'http://10.0.2.2:8000';
+            final backendBaseUrl = 'http://186.183.171.16:25565';
             Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => ChatScreen(backendBaseUrl: backendBaseUrl),
             ));
