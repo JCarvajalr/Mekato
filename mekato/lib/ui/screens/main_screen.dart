@@ -15,8 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  ReservationsService reservationsService = ReservationsService();
-  List<Widget> get pages => [Dashboard(), ReservationsScreen(service: reservationsService,), Dashboard()];
+  final ReservationsService reservationsService = ReservationsService();
 
   void _onNavbarTap(int value) {
     setState(() {
@@ -26,10 +25,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final pages = [
       Dashboard(),
-      // Si tienes pantalla de reservas, ponla aquí
-      Container(child: Center(child: Text('Reservas (placeholder)'))),
+      ReservationsScreen(service: reservationsService),
       const AccountScreen(),
     ];
 
@@ -39,15 +37,11 @@ class _MainScreenState extends State<MainScreen> {
         shadowColor: Colors.black.withOpacity(0.6),
         backgroundColor: MekatoColors.main,
         foregroundColor: Colors.white,
-        title: Text("Mekato"),
+        title: const Text("Mekato"),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
         ],
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
       ),
       body: pages[_selectedIndex],
       bottomNavigationBar: MekatoNavbar(
