@@ -15,6 +15,15 @@ bot = ChatBot(
     storage_adapter="chatterbot.storage.SQLStorageAdapter",
     database_uri=db_uri,
     read_only=True,  # no modificamos el almacenamiento en tiempo de petición
+    logic_adapters=[
+        {
+            "import_path": "chatterbot.logic.BestMatch",
+            # Respuesta por defecto cuando no se encuentra una coincidencia suficiente
+            "default_response": "Lo siento, no entendí eso. Puedes pedirme 'mis reservas' para ver tus reservas.",
+            # Umbral de similitud para aceptar una respuesta; si la similitud es menor, se usará default_response
+            "maximum_similarity_threshold": 0.85,
+        }
+    ],
 )
 
 # Entrenamiento mínimo (solo frases simples). Solo entrenar si no existe la BD del bot.
