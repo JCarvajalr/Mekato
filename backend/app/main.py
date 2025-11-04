@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
@@ -100,10 +101,11 @@ app.add_middleware(
 )
 
 # Importar rutas
-from app.routes import usuarios, reservas
+from app.routes import usuarios, reservas, chatbot
 
 app.include_router(usuarios.router)
 app.include_router(reservas.router)
+app.include_router(chatbot.router)
 
 @app.get(
     "/",

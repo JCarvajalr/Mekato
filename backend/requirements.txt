@@ -3,8 +3,10 @@ uvicorn==0.24.0
 sqlalchemy==2.0.23
 pymysql==1.1.0
 python-dotenv==1.0.0
-pydantic==2.5.0
+pydantic>=2.5.0
 cryptography==41.0.7
 python-jose==3.3.0
 passlib==1.7.4
 bcrypt==4.0.1
+chatterbot>=1.0.8
+chatterbot-corpus==1.2.0
