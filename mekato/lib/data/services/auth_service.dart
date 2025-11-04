@@ -39,4 +39,8 @@ class AuthService {
       return false;
     }
   }
+
+  void logout() {
+    authToken = "";
+  }
 }
